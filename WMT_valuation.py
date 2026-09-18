@@ -1,18 +1,21 @@
 """Simple peer P/E valuation.
 
-Run with: python peer_valuation.py
+Run with: python WMT_valuation.py
 """
 
 # Editable inputs. Prices and EPS are dollars per share.
 TARGET = {
-    "ticker": "ABG",
-    "price": 243.03,
-    "diluted_eps": 21.50,
+    "ticker": "WMT",
+    "price": None,  # Unresolved: Nasdaq matched-date close not verified.
+    "diluted_eps": 2.73,  # FY ended January 31, 2026.
 }
 
 PEERS = [
-    {"ticker": "AN", "price": 169.84, "diluted_eps": 16.92},
-    {"ticker": "GPI", "price": 421.48, "diluted_eps": 36.81},
+    {
+        "ticker": "COST",
+        "price": None,  # Unresolved: Nasdaq matched-date close not verified.
+        "diluted_eps": 18.21,  # FY ended August 31, 2025.
+    },
 ]
 
 
