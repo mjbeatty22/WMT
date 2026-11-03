@@ -1,0 +1,198 @@
+{
+  "ticker": "WMT",
+  "company": "Walmart Inc.",
+  "download_date": "2026-11-03",
+  "rows": [
+    {
+      "fiscal_year_end": "2022-01-31",
+      "values": {
+        "revenue": {
+          "value": 567762000000,
+          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "filed": "2024-03-15",
+          "accession": "0000104169-24-000056"
+        },
+        "net_income": {
+          "value": 13673000000,
+          "tag": "NetIncomeLoss",
+          "filed": "2024-03-15",
+          "accession": "0000104169-24-000056"
+        },
+        "operating_cash_flow": {
+          "value": 24181000000,
+          "tag": "NetCashProvidedByUsedInOperatingActivities",
+          "filed": "2024-03-15",
+          "accession": "0000104169-24-000056"
+        },
+        "capital_spending": {
+          "value": 13106000000,
+          "tag": "PaymentsToAcquirePropertyPlantAndEquipment",
+          "filed": "2024-03-15",
+          "accession": "0000104169-24-000056"
+        },
+        "equity": {
+          "value": 83253000000,
+          "tag": "StockholdersEquity",
+          "filed": "2023-03-17",
+          "accession": "0000104169-23-000020"
+        }
+      },
+      "roe": 0.16423432188629838,
+      "owner_earnings": 11075000000
+    },
+    {
+      "fiscal_year_end": "2023-01-31",
+      "values": {
+        "revenue": {
+          "value": 605881000000,
+          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "filed": "2025-03-14",
+          "accession": "0000104169-25-000021"
+        },
+        "net_income": {
+          "value": 11680000000,
+          "tag": "NetIncomeLoss",
+          "filed": "2025-03-14",
+          "accession": "0000104169-25-000021"
+        },
+        "operating_cash_flow": {
+          "value": 28841000000,
+          "tag": "NetCashProvidedByUsedInOperatingActivities",
+          "filed": "2025-03-14",
+          "accession": "0000104169-25-000021"
+        },
+        "capital_spending": {
+          "value": 16857000000,
+          "tag": "PaymentsToAcquirePropertyPlantAndEquipment",
+          "filed": "2025-03-14",
+          "accession": "0000104169-25-000021"
+        },
+        "equity": {
+          "value": 76693000000,
+          "tag": "StockholdersEquity",
+          "filed": "2024-03-15",
+          "accession": "0000104169-24-000056"
+        }
+      },
+      "roe": 0.15229551588802107,
+      "owner_earnings": 11984000000
+    },
+    {
+      "fiscal_year_end": "2024-01-31",
+      "values": {
+        "revenue": {
+          "value": 642637000000,
+          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "filed": "2026-03-13",
+          "accession": "0000104169-26-000055"
+        },
+        "net_income": {
+          "value": 15511000000,
+          "tag": "NetIncomeLoss",
+          "filed": "2026-03-13",
+          "accession": "0000104169-26-000055"
+        },
+        "operating_cash_flow": {
+          "value": 35726000000,
+          "tag": "NetCashProvidedByUsedInOperatingActivities",
+          "filed": "2026-03-13",
+          "accession": "0000104169-26-000055"
+        },
+        "capital_spending": {
+          "value": 20606000000,
+          "tag": "PaymentsToAcquirePropertyPlantAndEquipment",
+          "filed": "2026-03-13",
+          "accession": "0000104169-26-000055"
+        },
+        "equity": {
+          "value": 83861000000,
+          "tag": "StockholdersEquity",
+          "filed": "2025-03-14",
+          "accession": "0000104169-25-000021"
+        }
+      },
+      "roe": 0.18496082803687053,
+      "owner_earnings": 15120000000
+    },
+    {
+      "fiscal_year_end": "2025-01-31",
+      "values": {
+        "revenue": {
+          "value": 674538000000,
+          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "filed": "2026-03-13",
+          "accession": "0000104169-26-000055"
+        },
+        "net_income": {
+          "value": 19436000000,
+          "tag": "NetIncomeLoss",
+          "filed": "2026-03-13",
+          "accession": "0000104169-26-000055"
+        },
+        "operating_cash_flow": {
+          "value": 36443000000,
+          "tag": "NetCashProvidedByUsedInOperatingActivities",
+          "filed": "2026-03-13",
+          "accession": "0000104169-26-000055"
+        },
+        "capital_spending": {
+          "value": 23783000000,
+          "tag": "PaymentsToAcquirePropertyPlantAndEquipment",
+          "filed": "2026-03-13",
+          "accession": "0000104169-26-000055"
+        },
+        "equity": {
+          "value": 91013000000,
+          "tag": "StockholdersEquity",
+          "filed": "2026-03-13",
+          "accession": "0000104169-26-000055"
+        }
+      },
+      "roe": 0.2135519101666795,
+      "owner_earnings": 12660000000
+    },
+    {
+      "fiscal_year_end": "2026-01-31",
+      "values": {
+        "revenue": {
+          "value": 706413000000,
+          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "filed": "2026-03-13",
+          "accession": "0000104169-26-000055"
+        },
+        "net_income": {
+          "value": 21893000000,
+          "tag": "NetIncomeLoss",
+          "filed": "2026-03-13",
+          "accession": "0000104169-26-000055"
+        },
+        "operating_cash_flow": {
+          "value": 41565000000,
+          "tag": "NetCashProvidedByUsedInOperatingActivities",
+          "filed": "2026-03-13",
+          "accession": "0000104169-26-000055"
+        },
+        "capital_spending": {
+          "value": 26642000000,
+          "tag": "PaymentsToAcquirePropertyPlantAndEquipment",
+          "filed": "2026-03-13",
+          "accession": "0000104169-26-000055"
+        },
+        "equity": {
+          "value": 99617000000,
+          "tag": "StockholdersEquity",
+          "filed": "2026-03-13",
+          "accession": "0000104169-26-000055"
+        }
+      },
+      "roe": 0.21977172570946726,
+      "owner_earnings": 14923000000
+    }
+  ],
+  "checks": {
+    "ROE at least 15% every year": true,
+    "Owner earnings positive every year": true,
+    "Owner earnings grew, first year to last": true
+  },
+  "cik": "0000104169"
+}
