@@ -17,8 +17,10 @@ TAGS = {
     "operating_cash_flow": ["NetCashProvidedByUsedInOperatingActivities"],
     "capital_spending": ["PaymentsToAcquirePropertyPlantAndEquipment", "PaymentsToAcquireProductiveAssets"],
     "equity": ["StockholdersEquity"],
+    "liabilities": ["Liabilities"],
+    "research_and_development_expense": ["ResearchAndDevelopmentExpense"],
 }
-FLOWS = set(TAGS) - {"equity"}
+FLOWS = set(TAGS) - {"equity", "liabilities"}
 
 
 def get_json(url: str, user_agent: str) -> dict:
@@ -97,6 +99,26 @@ def build_panel(ticker: str, company_facts: dict) -> dict:
     growth = "not known"
     if len(rows) == 5 and rows[0]["owner_earnings"] is not None and rows[-1]["owner_earnings"] is not None:
         growth = rows[-1]["owner_earnings"] > rows[0]["owner_earnings"]
+    revenue_growth = "not known"
+    if len(rows) == 5 and rows[0]["values"]["revenue"] and rows[-1]["values"]["revenue"]:
+        first_revenue = rows[0]["values"]["revenue"]["value"]
+        last_revenue = rows[-1]["values"]["revenue"]["value"]
+        if first_revenue > 0 and last_revenue >= 0:
+            revenue_growth = (last_revenue / first_revenue) ** (1 / 4) - 1
+
+    latest = rows[-1] if rows else None
+    r_and_d_ratio = "not known"
+    if latest and latest["values"]["research_and_development_expense"] and latest["values"]["revenue"]:
+        latest_revenue = latest["values"]["revenue"]["value"]
+        if latest_revenue > 0:
+            r_and_d_ratio = latest["values"]["research_and_development_expense"]["value"] / latest_revenue
+
+    liabilities_to_equity = "not known"
+    if latest and latest["values"]["liabilities"] and latest["values"]["equity"]:
+        latest_equity = latest["values"]["equity"]["value"]
+        if latest_equity > 0:
+            liabilities_to_equity = latest["values"]["liabilities"]["value"] / latest_equity
+
     return {
         "ticker": ticker, "company": company_facts.get("entityName", "not found"),
         "download_date": date.today().isoformat(), "rows": rows,
@@ -104,6 +126,11 @@ def build_panel(ticker: str, company_facts: dict) -> dict:
             "ROE at least 15% every year": each(lambda row: None if row["roe"] is None else row["roe"] >= .15),
             "Owner earnings positive every year": each(lambda row: None if row["owner_earnings"] is None else row["owner_earnings"] > 0),
             "Owner earnings grew, first year to last": growth,
+        },
+        "derived": {
+            "Revenue growth per year, first year to last": revenue_growth,
+            "R&D as a share of latest-year revenue": r_and_d_ratio,
+            "Liabilities to latest-year equity": liabilities_to_equity,
         },
     }
 
@@ -123,6 +150,15 @@ def print_panel(panel: dict) -> None:
     print("\nChecks:")
     for label, result in panel["checks"].items():
         print(f"  {label}: {str(result).lower() if isinstance(result, bool) else result}")
+    print("\nDerived values:")
+    for label, value in panel["derived"].items():
+        if value == "not known":
+            display = "not known"
+        elif label == "Liabilities to latest-year equity":
+            display = f"{value:.2f}"
+        else:
+            display = f"{value:.2%}"
+        print(f"  {label}: {display}")
 
 
 def main() -> None:

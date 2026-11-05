@@ -11,6 +11,8 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+from investor_panel import investor_memo, panel_checks, verdict
+
 ROOT = Path(__file__).parent
 SCRIPT = ROOT / "scripts" / "edgar_five_years.py"
 
@@ -34,7 +36,21 @@ def text_value(item: dict | None) -> str:
 def allowed_numbers(panel: dict) -> set[str]:
     """Only digits printed by the script's panel or check labels may appear in the memo."""
     printed = json.dumps(panel)
-    printed += " ROE at least 15% every year Owner earnings positive every year Owner earnings grew first year to last"
+    for row in panel["rows"]:
+        if row["roe"] is not None:
+            printed += f" {row['roe']:.2%}"
+    for value in panel.get("derived", {}).values():
+        if value != "not known":
+            printed += f" {value:.2%}"
+    liabilities_to_equity = panel.get("derived", {}).get("Liabilities to latest-year equity")
+    if liabilities_to_equity not in (None, "not known"):
+        printed += f" {liabilities_to_equity:.2f}"
+    printed += (
+        " ROE at least 15% every year Owner earnings positive every year "
+        "Owner earnings grew first year to last Revenue growth per year at least 5% "
+        "Latest-year R&D at least 5% of revenue Operating cash flow at least net income every year "
+        "Latest-year liabilities no more than twice equity"
+    )
     return set(re.findall(r"\d+(?:\.\d+)?", printed))
 
 
@@ -78,6 +94,8 @@ for row in panel["rows"]:
         "Operating cash flow": text_value(values["operating_cash_flow"]),
         "Capital spending": text_value(values["capital_spending"]),
         "Equity": text_value(values["equity"]),
+        "Liabilities": text_value(values.get("liabilities")),
+        "R&D expense": text_value(values.get("research_and_development_expense")),
         "ROE": "not known" if row["roe"] is None else f"{row['roe']:.2%}",
         "Owner earnings": "not known" if row["owner_earnings"] is None else f"{row['owner_earnings']:,}",
         "_net_income": None if values["net_income"] is None else values["net_income"]["value"],
@@ -89,22 +107,36 @@ chart = table.set_index("Fiscal year end")[["_owner_earnings", "_net_income"]].r
 st.line_chart(chart, width="stretch")
 st.dataframe(table.drop(columns=["_net_income", "_owner_earnings"]), hide_index=True, width="stretch")
 
-st.subheader("Buffett-style checks")
-checks = pd.DataFrame([{"Check": name, "Result": str(result).lower() if isinstance(result, bool) else result} for name, result in panel["checks"].items()])
-st.dataframe(checks, hide_index=True, width="stretch")
+st.subheader("Three-investor panel")
+all_checks = panel_checks(panel)
+panel_rows = []
+derived = panel.get("derived", {})
+for investor, checks in all_checks.items():
+    for name, result in checks.items():
+        evidence = ""
+        if name.startswith("Revenue growth per year"):
+            value = derived.get("Revenue growth per year, first year to last")
+            evidence = "not known" if value in (None, "not known") else f"{value:.2%}"
+        elif name.startswith("Latest-year liabilities"):
+            value = derived.get("Liabilities to latest-year equity")
+            evidence = "not known" if value in (None, "not known") else f"{value:.2f}"
+        panel_rows.append({"Investor": investor, "Check": name, "Result": result, "Evidence": evidence, "Verdict": verdict(checks)})
+st.dataframe(pd.DataFrame(panel_rows), hide_index=True, width="stretch")
 
-memo_path = ROOT / f"{ticker}_memo.md"
-st.subheader("Business memo")
-if memo_path.exists():
-    memo = memo_path.read_text(encoding="utf-8")
-    st.markdown(memo)
-    unprinted = memo_audit(memo, panel)
-    if unprinted:
-        st.error("Memo numbers not printed by the script: " + ", ".join(unprinted))
-    else:
-        st.success("Every number in this memo appears in the script output.")
+st.subheader("Business memos")
+memos = {investor: investor_memo(investor, panel, checks) for investor, checks in all_checks.items()}
+columns = st.columns(3)
+for column, (investor, memo) in zip(columns, memos.items()):
+    with column:
+        st.markdown(memo)
+
+unprinted = {investor: memo_audit(memo, panel) for investor, memo in memos.items()}
+flagged = {investor: values for investor, values in unprinted.items() if values}
+if flagged:
+    details = "; ".join(f"{investor}: {', '.join(values)}" for investor, values in flagged.items())
+    st.error("Unprinted-number flag: " + details)
 else:
-    st.warning(f"No saved memo yet. Use the edgar-buffett-review skill after reviewing the printed {ticker} panel, then save {memo_path.name}.")
+    st.success("Unprinted-number flag: clear across all three memos.")
 
 with st.expander("SEC extraction log"):
     st.code(log)
